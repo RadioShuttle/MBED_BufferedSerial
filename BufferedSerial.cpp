@@ -81,7 +81,11 @@ int BufferedSerial::puts(const char *s)
 
 int BufferedSerial::printf(const char* format, ...)
 {
+#if defined(__ARMCC_VERSION) && not defined(__clang_major__) // ARMC5
+    char *buffer = (char *)alloca(this->_buf_size);
+#else
     char buffer[this->_buf_size];
+#endif
     memset(buffer,0,this->_buf_size);
     int r = 0;
 
